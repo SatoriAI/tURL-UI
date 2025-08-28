@@ -28,6 +28,7 @@ interface UrlStatus {
 const UrlShortener = () => {
   const [url, setUrl] = useState('');
   const [lifetime, setLifetime] = useState('30');
+  const [urlLength, setUrlLength] = useState('6');
   const [isLoading, setIsLoading] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState<ShortenedUrl | null>(null);
   const [copied, setCopied] = useState(false);
@@ -51,9 +52,10 @@ const UrlShortener = () => {
     }
   };
 
-  const generateShortUrl = () => {
-    // Mock short URL generation
-    const randomId = Math.random().toString(36).substring(2, 8);
+  const generateShortUrl = (length: string) => {
+    // Mock short URL generation with specified length
+    const lengthNum = parseInt(length);
+    const randomId = Math.random().toString(36).substring(2, 2 + lengthNum);
     return `https://turl.co/${randomId}`;
   };
 
@@ -81,7 +83,7 @@ const UrlShortener = () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    const shortUrl = generateShortUrl();
+    const shortUrl = generateShortUrl(urlLength);
     const newShortenedUrl: ShortenedUrl = {
       original: url,
       short: shortUrl,
@@ -201,6 +203,13 @@ const UrlShortener = () => {
     { value: 'forever', label: t('forever') },
   ];
 
+  const urlLengthOptions = [
+    { value: '2', label: '2', availability: '100+' },
+    { value: '4', label: '4', availability: '1M+' },
+    { value: '6', label: '6', availability: '1T+' },
+    { value: '8', label: '8', availability: '1000T+' },
+  ];
+
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       <Card className="shadow-soft border-border/50">
@@ -232,22 +241,47 @@ const UrlShortener = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="lifetime-select" className="text-sm font-medium">
-              {t('linkLifetime')}
-            </label>
-            <Select value={lifetime} onValueChange={setLifetime} disabled={isLoading}>
-              <SelectTrigger id="lifetime-select" className="h-12">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {lifetimeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label htmlFor="lifetime-select" className="text-sm font-medium">
+                {t('linkLifetime')}
+              </label>
+              <Select value={lifetime} onValueChange={setLifetime} disabled={isLoading}>
+                <SelectTrigger id="lifetime-select" className="h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {lifetimeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="url-length-select" className="text-sm font-medium">
+                {t('urlLength')}
+              </label>
+              <Select value={urlLength} onValueChange={setUrlLength} disabled={isLoading}>
+                <SelectTrigger id="url-length-select" className="h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {urlLengthOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{option.label} chars</span>
+                        <span className="text-xs text-muted-foreground ml-4">
+                          ({option.availability} available)
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <Button

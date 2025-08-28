@@ -204,6 +204,12 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'hours',
     pl: 'godzin',
   },
+
+  // URL Length
+  urlLength: {
+    en: 'URL Length',
+    pl: 'Długość URL',
+  },
 };
 
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
