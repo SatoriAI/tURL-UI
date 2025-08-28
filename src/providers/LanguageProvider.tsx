@@ -1,3 +1,4 @@
+
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { LanguageContext, type Language, type LanguageContextType } from '@/hooks/useLanguage';
 
@@ -128,6 +129,80 @@ const translations: Record<string, Record<Language, string>> = {
   heroSubtitle: {
     en: 'Fast, secure, and beautiful URL shortener with custom lifetimes',
     pl: 'Szybki, bezpieczny i piękny skracacz URL z niestandardowym czasem życia',
+  },
+
+  // URL Checker
+  checkUrlStatus: {
+    en: 'Check URL Status',
+    pl: 'Sprawdź Status URL',
+  },
+  checkExistingUrlDescription: {
+    en: 'Enter a shortened URL to check its status and extend its lifetime',
+    pl: 'Wprowadź skrócony URL, aby sprawdzić jego status i przedłużyć jego czas życia',
+  },
+  enterShortUrl: {
+    en: 'Enter Short URL',
+    pl: 'Wprowadź Krótki URL',
+  },
+  checkStatus: {
+    en: 'Check Status',
+    pl: 'Sprawdź Status',
+  },
+  checking: {
+    en: 'Checking...',
+    pl: 'Sprawdzanie...',
+  },
+  urlStatus: {
+    en: 'URL Status',
+    pl: 'Status URL',
+  },
+  status: {
+    en: 'Status',
+    pl: 'Status',
+  },
+  active: {
+    en: 'Active',
+    pl: 'Aktywny',
+  },
+  expired: {
+    en: 'Expired',
+    pl: 'Wygasły',
+  },
+  expiresIn: {
+    en: 'Expires in',
+    pl: 'Wygasa za',
+  },
+  extendLifetime: {
+    en: 'Extend Lifetime',
+    pl: 'Przedłuż Czas Życia',
+  },
+  extending: {
+    en: 'Extending...',
+    pl: 'Przedłużanie...',
+  },
+  newLifetime: {
+    en: 'New Lifetime',
+    pl: 'Nowy Czas Życia',
+  },
+  urlNotFound: {
+    en: 'URL not found or invalid',
+    pl: 'URL nie został znaleziony lub jest nieprawidłowy',
+  },
+  lifetimeExtendedSuccessfully: {
+    en: 'Lifetime extended successfully!',
+    pl: 'Czas życia przedłużony pomyślnie!',
+  },
+  days: {
+    en: 'days',
+    pl: 'dni',
+  },
+  day: {
+    en: 'day',
+    pl: 'dzień',
+  },
+  hours: {
+    en: 'hours',
+    pl: 'godzin',
   },
 };
 
