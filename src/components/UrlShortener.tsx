@@ -266,7 +266,16 @@ const UrlShortener = () => {
               </label>
               <Select value={urlLength} onValueChange={setUrlLength} disabled={isLoading}>
                 <SelectTrigger id="url-length-select" className="h-12">
-                  <SelectValue />
+                  <SelectValue>
+                    {urlLengthOptions.find(opt => opt.value === urlLength) && (
+                      <div className="flex items-center justify-between w-full">
+                        <span>{urlLengthOptions.find(opt => opt.value === urlLength)?.label} characters</span>
+                        <span className="text-xs text-muted-foreground ml-4">
+                          ({urlLengthOptions.find(opt => opt.value === urlLength)?.availability} available)
+                        </span>
+                      </div>
+                    )}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {urlLengthOptions.map((option) => (

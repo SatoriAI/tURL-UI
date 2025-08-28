@@ -207,8 +207,8 @@ const translations: Record<string, Record<Language, string>> = {
 
   // URL Length
   urlLength: {
-    en: 'URL Length',
-    pl: 'Długość URL',
+    en: 'Short Code Length',
+    pl: 'Długość Kodu',
   },
 };
 
