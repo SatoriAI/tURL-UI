@@ -198,6 +198,10 @@ const translations: Translations = {
     en: 'days',
     pl: 'dni',
   },
+  day: {
+    en: 'day',
+    pl: 'dzień',
+  },
   hours: {
     en: 'hours',
     pl: 'godzin',

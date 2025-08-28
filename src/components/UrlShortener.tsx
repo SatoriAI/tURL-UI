@@ -399,11 +399,16 @@ const UrlShortener = () => {
                     <span>{urlStatus.createdAt.toLocaleDateString()}</span>
                   </div>
                   
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">{t('lifetime')}:</span>
+                    <span>{lifetimeOptions.find(opt => opt.value === urlStatus.lifetime)?.label || urlStatus.lifetime}</span>
+                  </div>
+                  
                   {urlStatus.isActive && (
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{t('expiresIn')}:</span>
                       <span className="font-medium">
-                        {urlStatus.daysRemaining} {t('days')}
+                        {urlStatus.daysRemaining} {urlStatus.daysRemaining === 1 ? t('day') : t('days')}
                       </span>
                     </div>
                   )}
