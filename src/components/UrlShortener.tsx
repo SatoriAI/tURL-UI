@@ -281,7 +281,7 @@ const UrlShortener = () => {
                   {urlLengthOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value} className="px-6 pl-8">
                       <div className="flex items-center justify-between w-full min-w-0">
-                        <span className="truncate">{option.label} characters</span>
+                        <span>{option.label} characters</span>
                         <span className="text-xs text-muted-foreground ml-6 shrink-0">
                           ({option.availability} available)
                         </span>
