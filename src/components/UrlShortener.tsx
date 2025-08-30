@@ -268,9 +268,9 @@ const UrlShortener = () => {
                 <SelectTrigger id="url-length-select" className="h-12">
                   <SelectValue>
                     {urlLengthOptions.find(opt => opt.value === urlLength) && (
-                      <span>
-                        {urlLengthOptions.find(opt => opt.value === urlLength)?.label} characters{'  '}
-                        <span className="text-xs text-muted-foreground">
+                      <span className="flex items-center">
+                        <span>{urlLengthOptions.find(opt => opt.value === urlLength)?.label} characters</span>
+                        <span className="text-xs text-muted-foreground ml-6">
                           ({urlLengthOptions.find(opt => opt.value === urlLength)?.availability} available)
                         </span>
                       </span>
