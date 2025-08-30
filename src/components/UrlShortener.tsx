@@ -269,7 +269,7 @@ const UrlShortener = () => {
                   <SelectValue>
                     {urlLengthOptions.find(opt => opt.value === urlLength) && (
                       <span>
-                        {urlLengthOptions.find(opt => opt.value === urlLength)?.label} characters{' '}
+                        {urlLengthOptions.find(opt => opt.value === urlLength)?.label} characters{'  '}
                         <span className="text-xs text-muted-foreground">
                           ({urlLengthOptions.find(opt => opt.value === urlLength)?.availability} available)
                         </span>
@@ -279,10 +279,10 @@ const UrlShortener = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {urlLengthOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="px-6">
+                    <SelectItem key={option.value} value={option.value} className="px-6 pl-8">
                       <div className="flex items-center justify-between w-full min-w-0">
                         <span className="truncate">{option.label} characters</span>
-                        <span className="text-xs text-muted-foreground ml-3 shrink-0">
+                        <span className="text-xs text-muted-foreground ml-6 shrink-0">
                           ({option.availability} available)
                         </span>
                       </div>
