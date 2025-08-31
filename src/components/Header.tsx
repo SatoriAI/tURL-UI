@@ -32,7 +32,7 @@ const Header = () => {
         <nav className="flex items-center space-x-4">
           {/* Language Selector */}
           <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-            <SelectTrigger className="w-auto border-none bg-transparent">
+            <SelectTrigger className="w-auto border-none bg-transparent gap-3">
               <Globe className="h-4 w-4" />
               <SelectValue />
             </SelectTrigger>
