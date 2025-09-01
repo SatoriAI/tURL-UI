@@ -30,18 +30,6 @@ const Header = () => {
         </div>
 
         <nav className="flex items-center space-x-4">
-          {/* Language Selector */}
-          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-            <SelectTrigger className="w-auto border-none bg-transparent gap-3">
-              <Globe className="h-4 w-4" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="pl">Polski</SelectItem>
-            </SelectContent>
-          </Select>
-
           {/* Dark Mode Toggle */}
           <Button
             variant="ghost"
@@ -56,6 +44,18 @@ const Header = () => {
             )}
             <span className="sr-only">{t('toggleTheme')}</span>
           </Button>
+
+          {/* Language Selector */}
+          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+            <SelectTrigger className="w-auto border-none bg-transparent gap-3">
+              <Globe className="h-4 w-4" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="pl">Polski</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Donate Button */}
           <Button
