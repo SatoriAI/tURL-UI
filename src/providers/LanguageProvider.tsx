@@ -38,7 +38,7 @@ const translations: Record<string, Record<Language, string>> = {
   },
   createShortLinksDescription: {
     en: 'Create short links with custom lifetimes and track your URLs',
-    pl: 'Twórz krótkie linki z niestandardowym czasem życia i śledź swoje URL',
+    pl: 'Twórz krótkie linki z niestandardowym czasem życia i śledź swoje URL-e',
   },
   enterUrl: {
     en: 'Enter URL',
@@ -90,6 +90,10 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Forever',
     pl: 'Na Zawsze',
   },
+  infinite: {
+    en: 'Infinite',
+    pl: 'Nieskończony',
+  },
 
   // Messages
   error: {
@@ -128,7 +132,7 @@ const translations: Record<string, Record<Language, string>> = {
   },
   heroSubtitle: {
     en: 'Fast, secure, and beautiful URL shortener with custom lifetimes',
-    pl: 'Szybki, bezpieczny i piękny skracacz URL z niestandardowym czasem życia',
+    pl: 'Skracanie URL-i, które jest szybkie, bezpieczne i estetyczne, z możliwością ustawienia niestandardowego czasu ważności',
   },
 
   // URL Checker
@@ -142,7 +146,7 @@ const translations: Record<string, Record<Language, string>> = {
   },
   enterShortUrl: {
     en: 'Enter Short URL',
-    pl: 'Wprowadź Krótki URL',
+    pl: 'Wprowadź Skrócony URL',
   },
   checkStatus: {
     en: 'Check Status',
@@ -209,6 +213,34 @@ const translations: Record<string, Record<Language, string>> = {
   urlLength: {
     en: 'Short Code Length',
     pl: 'Długość Kodu',
+  },
+
+  // Features
+  fastReliable: {
+    en: 'Fast & Reliable',
+    pl: 'Szybki i Niezawodny',
+  },
+  secure: {
+    en: 'Secure',
+    pl: 'Bezpieczny',
+  },
+  customLifetimes: {
+    en: 'Custom Lifetimes',
+    pl: 'Niestandardowy Czas Życia',
+  },
+
+  // Feature descriptions
+  fastReliableDescription: {
+    en: 'Lightning-fast URL shortening with 99.9% uptime guarantee',
+    pl: 'Błyskawiczne skracanie URL-i z gwarancją 99,9% czasu działania',
+  },
+  secureDescription: {
+    en: 'Advanced security measures to protect your links and data',
+    pl: 'Zaawansowane środki bezpieczeństwa chroniące Twoje linki i dane',
+  },
+  customLifetimesDescription: {
+    en: 'Set custom expiration dates for your shortened URLs',
+    pl: 'Ustaw niestandardowe daty wygaśnięcia dla swoich skróconych URL-i',
   },
 };
 

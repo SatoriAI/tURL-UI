@@ -451,7 +451,7 @@ const UrlShortener = () => {
 
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{t('lifetime')}:</span>
-                    <span>{urlStatus.lifetime === null ? 'Infinite' : urlStatus.lifetime === 0 ? t('forever') : `${urlStatus.lifetime} days`}</span>
+                    <span>{urlStatus.lifetime === null ? t('infinite') : urlStatus.lifetime === 0 ? t('forever') : `${urlStatus.lifetime} days`}</span>
                   </div>
 
                   {!urlStatus.expired && urlStatus.expires_in > 0 && (

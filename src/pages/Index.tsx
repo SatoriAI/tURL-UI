@@ -44,24 +44,24 @@ const Index = () => {
                 <div className="h-12 w-12 rounded-lg gradient-primary flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-xl">⚡</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Fast & Reliable</h3>
-                <p className="text-muted-foreground">Lightning-fast URL shortening with 99.9% uptime guarantee</p>
+                <h3 className="text-lg font-semibold mb-2">{t('fastReliable')}</h3>
+                <p className="text-muted-foreground">{t('fastReliableDescription')}</p>
               </div>
               
               <div className="p-6 rounded-lg glass-effect animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <div className="h-12 w-12 rounded-lg gradient-primary flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-xl">🔒</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Secure</h3>
-                <p className="text-muted-foreground">Advanced security measures to protect your links and data</p>
+                <h3 className="text-lg font-semibold mb-2">{t('secure')}</h3>
+                <p className="text-muted-foreground">{t('secureDescription')}</p>
               </div>
               
               <div className="p-6 rounded-lg glass-effect animate-fade-in" style={{ animationDelay: '0.5s' }}>
                 <div className="h-12 w-12 rounded-lg gradient-primary flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-xl">⏰</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Custom Lifetimes</h3>
-                <p className="text-muted-foreground">Set custom expiration dates for your shortened URLs</p>
+                <h3 className="text-lg font-semibold mb-2">{t('customLifetimes')}</h3>
+                <p className="text-muted-foreground">{t('customLifetimesDescription')}</p>
               </div>
             </div>
           </div>
