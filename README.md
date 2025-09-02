@@ -60,6 +60,106 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## API Configuration
+
+This application connects to a backend API for URL shortening functionality.
+
+### Environment Variables
+
+Create a `.env` file in the root directory with the following configuration:
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:3001/api
+```
+
+For production:
+```env
+VITE_API_BASE_URL=https://your-api-domain.com/api
+```
+
+### API Configuration
+
+The application uses a centralized endpoint configuration system located in `src/lib/api-config.ts`. This makes it easy to:
+
+- **Add new endpoints** - Simply add them to the `URL_SHORTENER_ENDPOINTS` object
+- **Modify endpoint paths** - Change paths in one central location
+- **Support multiple environments** - Environment-specific overrides are supported
+- **Version management** - API versioning is handled automatically
+
+### API Endpoints
+
+The application expects the following API endpoints (all prefixed with `/v1/` by default):
+
+#### POST `/v1/shorten`
+Shortens a URL with the specified parameters.
+
+**Request Body:**
+```json
+{
+  "url": "http://example.com",
+  "lifetime": 365,
+  "length": 6
+}
+```
+
+**Notes:**
+- `lifetime`: Number of days (365 for 1 year, null for forever)
+- `length`: Desired length of the shortened URL
+
+**Response:**
+```json
+{
+  "url": "https://turl.co/abc123"
+}
+```
+
+#### GET `/v1/urls/{id}`
+Retrieves status information for a shortened URL.
+
+#### PATCH `/v1/urls/{id}/extend`
+Extends the lifetime of a shortened URL.
+
+### Adding New Endpoints
+
+To add a new endpoint, simply add it to the `URL_SHORTENER_ENDPOINTS` object in `src/lib/api-config.ts`:
+
+```typescript
+export const URL_SHORTENER_ENDPOINTS: EndpointGroup = {
+  // ... existing endpoints
+
+  // Add new endpoint
+  delete: {
+    path: (urlId: string) => `urls/${urlId}`,
+    method: 'DELETE',
+    description: 'Delete a shortened URL',
+  },
+
+  analytics: {
+    path: (urlId: string) => `urls/${urlId}/analytics`,
+    method: 'GET',
+    description: 'Get analytics for a shortened URL',
+  },
+};
+```
+
+Then use it in the API service:
+
+```typescript
+async deleteUrl(urlId: string) {
+  const endpoint = buildEndpointUrl(getEndpointDefinition('delete'), urlId);
+  return this.request(endpoint, { method: 'DELETE' });
+}
+```
+
+### Environment Variables
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:8010/
+VITE_API_VERSION=v1
+```
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/223a6bfa-73f9-4bc9-bd06-174cfc545b2b) and click on Share -> Publish.

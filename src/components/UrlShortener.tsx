@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToast } from '@/hooks/use-toast';
+import { apiService, extractCodeFromUrl } from '@/lib/api';
 
 interface ShortenedUrl {
   original: string;
@@ -16,13 +17,13 @@ interface ShortenedUrl {
 }
 
 interface UrlStatus {
-  original: string;
-  short: string;
-  lifetime: string;
-  createdAt: Date;
-  expiresAt: Date;
-  isActive: boolean;
-  daysRemaining: number;
+  url: string;
+  lifetime: number;
+  registered: string;
+  modified: string;
+  expires_at: string;
+  expires_in: number;
+  expired: boolean;
 }
 
 const UrlShortener = () => {
@@ -37,6 +38,7 @@ const UrlShortener = () => {
   const [checkUrl, setCheckUrl] = useState('');
   const [isChecking, setIsChecking] = useState(false);
   const [urlStatus, setUrlStatus] = useState<UrlStatus | null>(null);
+  const [lastCheckedUrl, setLastCheckedUrl] = useState(''); // Store the URL that was checked
   const [extendLifetime, setExtendLifetime] = useState('30');
   const [isExtending, setIsExtending] = useState(false);
   
@@ -52,12 +54,7 @@ const UrlShortener = () => {
     }
   };
 
-  const generateShortUrl = (length: string) => {
-    // Mock short URL generation with specified length
-    const lengthNum = parseInt(length);
-    const randomId = Math.random().toString(36).substring(2, 2 + lengthNum);
-    return `https://turl.co/${randomId}`;
-  };
+
 
   const handleShorten = async () => {
     if (!url) {
@@ -79,25 +76,34 @@ const UrlShortener = () => {
     }
 
     setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const shortUrl = generateShortUrl(urlLength);
-    const newShortenedUrl: ShortenedUrl = {
-      original: url,
-      short: shortUrl,
-      lifetime,
-      createdAt: new Date(),
-    };
 
-    setShortenedUrl(newShortenedUrl);
-    setIsLoading(false);
-    
-    toast({
-      title: t('success'),
-      description: t('urlShortenedSuccessfully'),
-    });
+    try {
+      const response = await apiService.shortenUrl(url, lifetime, urlLength);
+
+      const newShortenedUrl: ShortenedUrl = {
+        original: url,
+        short: response.url,
+        lifetime,
+        createdAt: new Date(),
+      };
+
+      setShortenedUrl(newShortenedUrl);
+      setUrl(''); // Clear the input after successful shortening
+
+      toast({
+        title: t('success'),
+        description: t('urlShortenedSuccessfully'),
+      });
+    } catch (error) {
+      console.error('URL shortening error:', error);
+      toast({
+        title: t('error'),
+        description: error instanceof Error ? error.message : 'Failed to shorten URL. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCopy = async () => {
@@ -123,7 +129,8 @@ const UrlShortener = () => {
       return;
     }
 
-    if (!checkUrl.includes('turl.co/')) {
+    // Basic URL validation - should contain a domain and path
+    if (!checkUrl.includes('/') || checkUrl.split('/').length < 3) {
       toast({
         title: t('error'),
         description: t('pleaseEnterValidUrl'),
@@ -133,66 +140,66 @@ const UrlShortener = () => {
     }
 
     setIsChecking(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Mock URL status check
-    const mockCreatedDate = new Date();
-    mockCreatedDate.setDate(mockCreatedDate.getDate() - Math.floor(Math.random() * 20));
-    
-    const isActive = Math.random() > 0.2; // 80% chance of being active
-    const daysRemaining = isActive ? Math.floor(Math.random() * 25) + 1 : 0;
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + daysRemaining);
-    
-    const mockStatus: UrlStatus = {
-      original: `https://example${Math.floor(Math.random() * 100)}.com/very/long/url/path`,
-      short: checkUrl,
-      lifetime: '30',
-      createdAt: mockCreatedDate,
-      expiresAt,
-      isActive,
-      daysRemaining,
-    };
 
-    setUrlStatus(mockStatus);
-    setIsChecking(false);
-    
-    toast({
-      title: t('success'),
-      description: isActive ? t('urlStatus') : t('urlNotFound'),
-      variant: isActive ? 'default' : 'destructive',
-    });
+    try {
+      const status = await apiService.checkUrlStatus(checkUrl);
+
+      setUrlStatus(status);
+      setLastCheckedUrl(checkUrl); // Store the checked URL for display
+      setCheckUrl(''); // Clear the input after successful check
+
+      toast({
+        title: t('success'),
+        description: status.expired ? t('urlNotFound') : t('urlStatus'),
+        variant: status.expired ? 'destructive' : 'default',
+      });
+    } catch (error) {
+      console.error('URL check error:', error);
+      toast({
+        title: t('error'),
+        description: error instanceof Error ? error.message : 'Failed to check URL status. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsChecking(false);
+    }
   };
 
   const handleExtendLifetime = async () => {
     if (!urlStatus) return;
 
-    setIsExtending(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const additionalDays = extendLifetime === 'forever' ? 99999 : parseInt(extendLifetime);
-    const newExpiresAt = new Date();
-    newExpiresAt.setDate(newExpiresAt.getDate() + urlStatus.daysRemaining + additionalDays);
-    
-    const updatedStatus: UrlStatus = {
-      ...urlStatus,
-      lifetime: extendLifetime,
-      expiresAt: newExpiresAt,
-      daysRemaining: urlStatus.daysRemaining + additionalDays,
-      isActive: true,
-    };
+    // Check if we have a valid URL to extend
+    if (!lastCheckedUrl || lastCheckedUrl.trim().length === 0) {
+      toast({
+        title: t('error'),
+        description: 'No URL to extend. Please check a URL first.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    setUrlStatus(updatedStatus);
-    setIsExtending(false);
-    
-    toast({
-      title: t('success'),
-      description: t('lifetimeExtendedSuccessfully'),
-    });
+    setIsExtending(true);
+
+    try {
+      // Extract the code from the last checked URL to extend
+      const code = extractCodeFromUrl(lastCheckedUrl);
+      const updatedStatus = await apiService.extendUrlLifetime(code, extendLifetime);
+      setUrlStatus(updatedStatus);
+
+      toast({
+        title: t('success'),
+        description: t('lifetimeExtendedSuccessfully'),
+      });
+    } catch (error) {
+      console.error('URL extension error:', error);
+      toast({
+        title: t('error'),
+        description: error instanceof Error ? error.message : 'Failed to extend lifetime. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsExtending(false);
+    }
   };
 
   const lifetimeOptions = [
@@ -429,29 +436,29 @@ const UrlShortener = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{t('status')}:</span>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      urlStatus.isActive 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                      !urlStatus.expired
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                         : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                     }`}>
-                      {urlStatus.isActive ? t('active') : t('expired')}
+                      {!urlStatus.expired ? t('active') : t('expired')}
                     </span>
                   </div>
-                  
+
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{t('created')}:</span>
-                    <span>{urlStatus.createdAt.toLocaleDateString()}</span>
+                    <span>{new Date(urlStatus.registered).toLocaleDateString()}</span>
                   </div>
-                  
+
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{t('lifetime')}:</span>
-                    <span>{lifetimeOptions.find(opt => opt.value === urlStatus.lifetime)?.label || urlStatus.lifetime}</span>
+                    <span>{urlStatus.lifetime === null ? 'Infinite' : urlStatus.lifetime === 0 ? t('forever') : `${urlStatus.lifetime} days`}</span>
                   </div>
-                  
-                  {urlStatus.isActive && (
+
+                  {!urlStatus.expired && urlStatus.expires_in > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{t('expiresIn')}:</span>
                       <span className="font-medium">
-                        {urlStatus.daysRemaining} {urlStatus.daysRemaining === 1 ? t('day') : t('days')}
+                        {urlStatus.expires_in} {urlStatus.expires_in === 1 ? t('day') : t('days')}
                       </span>
                     </div>
                   )}
@@ -460,14 +467,14 @@ const UrlShortener = () => {
 
               <div className="p-4 bg-muted rounded-lg">
                 <p className="font-mono text-sm text-muted-foreground truncate mb-2">
-                  {urlStatus.original}
+                  {urlStatus.url}
                 </p>
                 <p className="font-mono text-lg font-semibold text-primary truncate">
-                  {urlStatus.short}
+                  {lastCheckedUrl}
                 </p>
               </div>
 
-              {urlStatus.isActive && (
+              {!urlStatus.expired && (
                 <div className="space-y-4 pt-4 border-t border-border">
                   <div className="space-y-2">
                     <label htmlFor="extend-lifetime-select" className="text-sm font-medium">

@@ -53,7 +53,7 @@ const Footer = () => {
         
         <div className="mt-6 pt-6 border-t border-border/40 text-center">
           <p className="text-xs text-muted-foreground">
-            © 2024 tURL. {t('allRightsReserved')}
+            © 2025 tURL. {t('allRightsReserved')}
           </p>
         </div>
       </div>
