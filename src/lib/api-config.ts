@@ -11,9 +11,19 @@ export interface EndpointGroup {
   [key: string]: EndpointDefinition;
 }
 
+// Environment-specific API configuration
+const getApiBaseUrl = (): string => {
+  // Check for explicit environment variable first
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  return 'http://localhost:8010/';
+};
+
 // Base API configuration
 export const API_CONFIG = {
-  baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8010/',
+  baseUrl: getApiBaseUrl(),
 };
 
 // URL Shortener API Endpoints
