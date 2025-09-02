@@ -7,6 +7,8 @@ FROM node:20-alpine AS builder
 
 # Prevents production-only installs from pruning devDeps during build
 ENV NODE_ENV=development
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 WORKDIR /app
 
