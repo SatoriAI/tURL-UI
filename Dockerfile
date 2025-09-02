@@ -40,6 +40,8 @@ RUN npm i -g serve@14.2.3
 # Copy built assets from builder
 COPY --from=builder /app/dist /app/dist
 
-# Railway will inject PORT
-ENV PORT=8080
+# Railway will inject PORT. We expose 8080 as a convention/hint.
 EXPOSE 8080
+
+# Start the static server, bind to 0.0.0.0 and use Railway's $PORT with fallback to 8080
+CMD ["sh", "-c", "serve -s /app/dist -l tcp://0.0.0.0:${PORT:-8080}"]
