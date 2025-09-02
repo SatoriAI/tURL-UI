@@ -10,8 +10,8 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
 
   const handleDonate = () => {
-    // PayPal donation link - replace with actual donation URL
-    window.open('https://www.paypal.com/donate/?business=YOUR_PAYPAL_EMAIL&currency_code=USD', '_blank');
+    // Buy Me a Coffee donation link
+    window.open('https://buymeacoffee.com/dawidhanrahan', '_blank');
   };
 
   return (

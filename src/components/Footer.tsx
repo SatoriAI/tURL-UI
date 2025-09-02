@@ -7,17 +7,17 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: Github,
-      href: 'https://github.com/yourusername',
+      href: 'https://github.com/SatoriAI',
       label: 'GitHub',
     },
     {
       icon: Globe,
-      href: 'https://yourdomain.com',
+      href: 'https://dawidhanrahan.com',
       label: t('personalWebsite'),
     },
     {
       icon: Twitter,
-      href: 'https://twitter.com/yourusername',
+      href: 'https://x.com/Dav_Hanrahan',
       label: 'Twitter / X',
     },
   ];
