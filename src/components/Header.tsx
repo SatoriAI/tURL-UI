@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Moon, Sun, Globe, Heart } from 'lucide-react';
+import { Moon, Sun, Globe, Heart, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage, type Language } from '@/hooks/useLanguage';
 
@@ -29,7 +30,8 @@ const Header = () => {
           </h1>
         </div>
 
-        <nav className="flex items-center space-x-4">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-4">
           {/* Language Selector */}
           <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
             <SelectTrigger className="w-auto border-none bg-transparent gap-3">
@@ -68,6 +70,75 @@ const Header = () => {
             <span>{t('donate')}</span>
           </Button>
         </nav>
+
+        {/* Mobile Navigation */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden h-9 w-9 p-0"
+            >
+              <Menu className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-80">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col space-y-6 mt-6">
+              {/* Language Selector */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Language</label>
+                <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+                  <SelectTrigger className="w-full">
+                    <Globe className="h-4 w-4" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="pl">Polski</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Dark Mode Toggle */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Theme</label>
+                <Button
+                  variant="outline"
+                  onClick={toggleTheme}
+                  className="w-full justify-start"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun className="h-4 w-4 mr-2" />
+                      Light Mode
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="h-4 w-4 mr-2" />
+                      Dark Mode
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Donate Button */}
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  onClick={handleDonate}
+                  className="w-full justify-start hover:bg-primary hover:text-primary-foreground transition-smooth"
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  {t('donate')}
+                </Button>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
